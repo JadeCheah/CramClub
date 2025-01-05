@@ -131,14 +131,14 @@ public/
 .yarn/install-state.gz
 .pnp.*
 
-# Go-specific files (nested backend folder)
-cramclub/backend/*.exe
-cramclub/backend/*.dll
-cramclub/backend/*.so
-cramclub/backend/*.dylib
-cramclub/backend/*.test
-cramclub/backend/*.out
-cramclub/backend/vendor/
+# Backend-specific ignore rules
+CramClub/backend/*.exe
+CramClub/backend/*.dll
+CramClub/backend/*.so
+CramClub/backend/*.dylib
+CramClub/backend/*.test
+CramClub/backend/*.out
+CramClub/backend/vendor/
 
 # PostgreSQL-related files
 *.sql~
