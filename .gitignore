@@ -41,6 +41,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+cramclub/frontend/node_modules/  # Explicit path for nested frontend directory
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -93,6 +94,7 @@ dist
 
 # Gatsby files
 .cache/
+public/
 # Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
@@ -128,3 +130,30 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Go-specific files (nested backend folder)
+cramclub/backend/*.exe
+cramclub/backend/*.dll
+cramclub/backend/*.so
+cramclub/backend/*.dylib
+cramclub/backend/*.test
+cramclub/backend/*.out
+cramclub/backend/vendor/
+
+# PostgreSQL-related files
+*.sql~
+*.sql-journal
+data/
+backup/
+pg_dump.sql
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.idea/
+.vscode/
+
+# TypeScript cache
+*.tsbuildinfo
