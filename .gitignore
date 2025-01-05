@@ -41,7 +41,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-cramclub/frontend/node_modules/  # Explicit path for nested frontend directory
+CramClub/frontend/node_modules/  # Explicit path for nested frontend directory
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
