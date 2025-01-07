@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 
+	"time"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -35,7 +38,17 @@ func main() {
 	initDatabase()
 	// models.DB.Create(&models.Thread{Title: "First Thread", Content: "This is the first thread"})
 	// models.DB.Create(&models.Thread{Title: "Second Thread", Content: "This is the second thread"})
-	r := gin.Default()             //set up a gin router
+	r := gin.Default() //set up a gin router
+
+	//Add CORS Middleware
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true, // cookies or authentication tokens
+		MaxAge:           12 * time.Hour,
+	}))
+
 	routes.RegisterThreadRoutes(r) //register routes
 	log.Println("Starting server on port 8080...")
 	r.Run(":8080")
