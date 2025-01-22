@@ -1,13 +1,26 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
+
+import AuthScreen from './pages/AuthScreen';
 import ThreadsPage from './pages/ThreadsPage';
-import './App.css'
+import ProfilePage from './pages/ProfilePage';
+import AppHeader from './components/AppHeader';
+
+import './App.css';
 
 function App() {
+  const isAuthenticated = useSelector((state: RootState) => Boolean(state.auth.token));
+
   return (
     <BrowserRouter>
+      <AppHeader />
       <Routes>
-        <Route path="/" element={<ThreadsPage />} />
+        <Route path="/" element={ isAuthenticated? <Navigate to="/threads" /> : <AuthScreen />} />
+        <Route path="/threads" element={ isAuthenticated ? <ThreadsPage /> : <Navigate to="/" /> } />
+        <Route path="/profile" element={ isAuthenticated ? <ProfilePage /> : <Navigate to="/" /> } />
+        <Route path="*" element={ <div>404 - Page Not Found</div> } />
       </Routes>
     </BrowserRouter>
   );

@@ -3,17 +3,36 @@ package controllers
 import (
 	"net/http"
 
-	"CramClub-backend/models"
-
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+
+	"CramClub-backend/models"
 )
 
 func GetThreads(c *gin.Context) {
 	var threads []models.Thread
 
-	//fetch all threads from db
-	if err := models.DB.Find(&threads).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch threads"})
+	db, ok := c.MustGet("db").(*gorm.DB) //get DB connection from context
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection not found"})
+		return
+	}
+
+	//handles sorting of threads
+	sort := c.DefaultQuery("sort", "createdAt") //accepts "createdAt" or "ratings" as sorting parameter
+	switch sort {
+	case "createdAt":
+		db = db.Order("created_at DESC")
+	case "ratings":
+		db = db.Order("ratings DESC")
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid sort parameter"})
+		return
+	}
+
+	//fetch threads
+	if err := db.Preload("Author").Preload("Tags").Find(&threads).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	// Return the threads as JSON
@@ -22,12 +41,29 @@ func GetThreads(c *gin.Context) {
 }
 
 func CreateThread(c *gin.Context) {
-	var thread models.Thread
+	var input struct {
+		Title   string `json:"title"`
+		Content string `json:"content"`
+	}
+
+	//get userID from the context
+	userID := c.GetUint("user_id")
+	if userID == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 
 	//bind JSON payload to thread struct
-	if err := c.ShouldBindJSON(&thread); err != nil {
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
+	}
+
+	//create the thread with the associated userID
+	thread := models.Thread{
+		Title:   input.Title,
+		Content: input.Content,
+		UserID:  userID,
 	}
 
 	//save the thread to the database

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -10,11 +9,18 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
+	"CramClub-backend/controllers"
 	"CramClub-backend/models"
 	"CramClub-backend/routes"
 )
 
-var DB *gorm.DB
+// middleware function to inject the database connection to the Gin context
+func InjectDB(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	}
+}
 
 func initDatabase() {
 	//Database connection string
@@ -27,8 +33,16 @@ func initDatabase() {
 	}
 	log.Println("Database connected!")
 
-	// Perform database migration
-	if err := models.DB.AutoMigrate(&models.Thread{}); err != nil {
+	// List of all models to automigrate
+	modelsToMigrate := []interface{}{
+		&models.User{},
+		&models.Thread{},
+		&models.Tag{},
+		// Add new models here as needed
+	}
+
+	// Automigrate all models
+	if err := models.DB.AutoMigrate(modelsToMigrate...); err != nil {
 		log.Fatal("Failed to migrate database schema:", err)
 	}
 	log.Println("Database migrated!")
@@ -36,9 +50,8 @@ func initDatabase() {
 
 func main() {
 	initDatabase()
-	// models.DB.Create(&models.Thread{Title: "First Thread", Content: "This is the first thread"})
-	// models.DB.Create(&models.Thread{Title: "Second Thread", Content: "This is the second thread"})
 	r := gin.Default() //set up a gin router
+	r.Use(InjectDB(models.DB))
 
 	//Add CORS Middleware
 	r.Use(cors.New(cors.Config{
@@ -49,7 +62,15 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	routes.RegisterThreadRoutes(r) //register routes
+	authController := controllers.NewAuthController(models.DB)
+
+	//register routes
+	routes.RegisterAuthRoutes(r, authController)
+	routes.RegisterThreadRoutes(r)
+	routes.RegisterUserRoutes(r)
+
 	log.Println("Starting server on port 8080...")
-	r.Run(":8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Failed to start server: ", err)
+	}
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ThreadList from "../components/ThreadList";
 import ThreadForm from "../components/ThreadForm";
+import './ThreadsPage.css';
 
 interface Thread {
     id: number;
@@ -59,8 +60,8 @@ const ThreadsPage: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Threads</h1>
+        <div className="thread-page">
+            <h1>All Threads</h1>
             <ThreadForm
                 onSubmit={addThread}
                 onUpdate={updateThread}

@@ -1,0 +1,32 @@
+.profile-container {
+
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color:antiquewhite;
+}
+
+.profile-avatar {
+    margin: 10px;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+.profile-divider {
+    
+}
+
+.profile-actions {
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    padding-right: 20px;
+}
