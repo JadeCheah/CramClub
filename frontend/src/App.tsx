@@ -22,6 +22,7 @@ function App() {
         <Route path="/threads" element={ isAuthenticated ? <ThreadsPage /> : <Navigate to="/" /> } />
         <Route path="/profile" element={ isAuthenticated ? <ProfilePage /> : <Navigate to="/" /> } />
         <Route path="/add-post" element={<ThreadFormPage />} />
+        <Route path="/edit-post/:id" element={<ThreadFormPage />} />
         <Route path="*" element={ <div>404 - Page Not Found</div> } />
       </Routes>
     </BrowserRouter>

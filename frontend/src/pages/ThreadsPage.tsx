@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ThreadList from "../components/ThreadList";
-import ThreadForm from "../components/ThreadForm";
 import './ThreadsPage.css';
 import axiosInstance from "../utils/axiosInstance";
 
@@ -82,7 +81,7 @@ const ThreadsPage: React.FC = () => {
             <ThreadList
                 threads={threads}
                 deleteThread={deleteThread}
-                setEditingThread={() => {}}
+                setEditingThread={(thread) => navigate(`/edit-post/${thread.id}`)} 
             />
         </div>
     );

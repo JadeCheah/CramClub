@@ -12,6 +12,7 @@ func RegisterThreadRoutes(router *gin.Engine, authController *controllers.AuthCo
 
 	threads.POST("/", controllers.CreateThread)      // Add a thread
 	threads.GET("/", controllers.GetThreads)         // List all threads
+	threads.GET("/:id", controllers.GetThread)       // Get a single thread by ID
 	threads.PUT("/:id", controllers.UpdateThread)    // Update a thread
 	threads.DELETE("/:id", controllers.DeleteThread) // Delete a thread
 }

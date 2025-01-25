@@ -10,6 +10,7 @@ import (
 	"CramClub-backend/models"
 )
 
+// Different from GetThread, this function returns all threads
 func GetThreads(c *gin.Context) {
 	var threads []models.Thread
 
@@ -38,6 +39,19 @@ func GetThreads(c *gin.Context) {
 	// Return the threads as JSON
 	c.JSON(http.StatusOK, gin.H{"threads": threads})
 
+}
+
+// Different from GetThreads, this function returns a single thread
+func GetThread(c *gin.Context) {
+	id := c.Param("id")
+	var thread models.Thread
+
+	// Fetch thread with given ID
+	if err := models.DB.Preload("Author").Preload("Tags").First(&thread, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Thread not found"})
+		return
+	}
+	c.JSON(http.StatusOK, thread)
 }
 
 func CreateThread(c *gin.Context) {
