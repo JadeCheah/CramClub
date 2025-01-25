@@ -1,0 +1,55 @@
+.thread-form-page {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.thread-form-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.thread-form-page form {
+    display: flex;
+    flex-direction: column;
+}
+
+.thread-form-page label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.thread-form-page input, 
+.thread-form-page textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.thread-form-page .form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.thread-form-page button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.thread-form-page button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.thread-form-page button[type="button"] {
+    background-color: #f8f9fa;
+    color: #333;
+}
