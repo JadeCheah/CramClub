@@ -6,6 +6,7 @@ interface Thread {
     title: string;
     content: string;
     author?: { username: string }; // Optional, only needed for display
+    createdAt?: string;
 }
 
 interface ThreadListProps {
@@ -15,6 +16,18 @@ interface ThreadListProps {
 }
 
 const ThreadList: React.FC<ThreadListProps> = ({ threads, deleteThread, setEditingThread }) => {
+    //helper function to format dates
+    const formatDate = (dateString: string) => {
+        const options: Intl.DateTimeFormatOptions = {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, 
+        }
+        return new Date(dateString).toLocaleString("en-US", options);
+    }
     return (
         <div>
             {threads.map((thread) => {
@@ -22,12 +35,15 @@ const ThreadList: React.FC<ThreadListProps> = ({ threads, deleteThread, setEditi
                     <div className="thread-container" key={thread.id}>
                         <h3 className="thread-title">{thread.title}</h3>
                         <p className="thread-content">{thread.content}</p>
-                        <p className="thread-author">Author: {thread.author?.username || "Unknown"}</p> 
+                        {thread.createdAt && (
+                            <p className="thread-date">{formatDate(thread.createdAt)}</p>
+                        )}
+                        <p className="thread-author">Author: {thread.author?.username || "Unknown"}</p>
                         <div className="thread-buttons">
                             <button onClick={() => setEditingThread(thread)}>Edit</button>
                             <button onClick={() => deleteThread(thread.id)}>Delete</button>
                         </div>
-                    </div>        
+                    </div>
                 );
             })}
         </div>
