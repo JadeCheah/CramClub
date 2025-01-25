@@ -66,7 +66,7 @@ func main() {
 
 	//register routes
 	routes.RegisterAuthRoutes(r, authController)
-	routes.RegisterThreadRoutes(r)
+	routes.RegisterThreadRoutes(r, authController)
 	routes.RegisterUserRoutes(r)
 
 	log.Println("Starting server on port 8080...")

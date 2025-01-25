@@ -6,20 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterThreadRoutes(router *gin.Engine) {
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
+func RegisterThreadRoutes(router *gin.Engine, authController *controllers.AuthController) {
+	threads := router.Group("/threads")
+	threads.Use(authController.AuthMiddleware()) // Apply AuthMiddleware to all thread routes
 
-	//route to get all threads
-	router.GET("/threads", controllers.GetThreads)
-
-	//route to create a new thread
-	router.POST("/threads", controllers.CreateThread)
-
-	//route to update a thread
-	router.PUT("/threads/:id", controllers.UpdateThread)
-
-	//route to delete a thread
-	router.DELETE("/threads/:id", controllers.DeleteThread)
+	threads.POST("/", controllers.CreateThread)      // Add a thread
+	threads.GET("/", controllers.GetThreads)         // List all threads
+	threads.PUT("/:id", controllers.UpdateThread)    // Update a thread
+	threads.DELETE("/:id", controllers.DeleteThread) // Delete a thread
 }

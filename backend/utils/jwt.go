@@ -8,6 +8,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+
+	"CramClub-backend/models"
 )
 
 var jwtSecret string
@@ -38,22 +40,64 @@ func GenerateJWT(username string) (string, error) {
 
 // Parses the JWT and extracts the username
 func ParseJWT(tokenString string) (string, error) {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return "", errors.New("JWT_SECRET is not set")
-	}
-
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
+		return []byte(jwtSecret), nil
 	})
+
+	if err != nil {
+		return "", err
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		username, ok := claims["username"].(string)
 		if !ok {
-			return "", errors.New("Invalid token payload")
+			return "", errors.New("invalid token payload")
 		}
 		return username, nil
 	}
 
-	return "", err
+	return "", errors.New("invalid token")
+}
+
+// Validates the token and extracts the userID
+func ValidateTokenAndGetUserID(tokenString string) (uint, error) {
+	log.Println("Validating token:", tokenString) //debug message
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		log.Println("Token parsing error:", err) // Log the specific error
+		return 0, errors.New("invalid or expired token")
+	}
+
+	// if err != nil || !token.Valid {
+	// 	return 0, errors.New("invalid or expired token")
+	// }
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		exp, ok := claims["exp"].(float64)
+		if !ok || time.Now().Unix() > int64(exp) {
+			log.Println("Token is expired or missing exp claim")
+			return 0, errors.New("token expired")
+		}
+
+		username, ok := claims["username"].(string)
+		if !ok {
+			return 0, errors.New("username not found in token")
+		}
+
+		log.Println("Valid token, username:", username) //debug message
+
+		// Fetch user ID from the database using username
+		var user models.User
+		if err := models.DB.Where("username = ?", username).First(&user).Error; err != nil {
+			log.Println("User not found for username:", username) //debug message
+			return 0, errors.New("user not found")
+		}
+		log.Println("User validated, userID:", user.ID) //debug message
+		return user.ID, nil
+	}
+
+	log.Println("Invalid token claims") //debug message
+	return 0, errors.New("invalid token claims")
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -90,24 +91,40 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 	})
 }
 
-// func (ctrl *AuthController) AuthMiddleware() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		//retrieve the token from the Authorization header
-// 		token := c.GetHeader("Authorization")
-// 		if token == "" {
-// 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
-// 			return
-// 		}
+func (ctrl *AuthController) AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//retrieve the token from the Authorization header
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			log.Println("Authorization header missing")
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
+			return
+		}
+		log.Println("Authorization header:", authHeader)
 
-// 		//validate the token and extract userID
-// 		userID, err := utils.ValidateTokenAndGetUserID(token)
-// 		if err != nil {
-// 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
-// 			return
-// 		}
+		// Check if the token is in the format "Bearer <token>"
+		const bearerPrefix = "Bearer "
+		if len(authHeader) < len(bearerPrefix) || authHeader[:len(bearerPrefix)] != bearerPrefix {
+			log.Println("Invalid Authorization header format")
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization header format"})
+			return
+		}
 
-// 		//set the userID in the context for subsequent handlers
-// 		c.Set("user_id", userID)
-// 		c.Next()
-// 	}
-// }
+		// Extract the token part after "Bearer "
+		token := authHeader[len(bearerPrefix):]
+		log.Println("Extracted token:", token) //debug message
+
+		//validate the token and extract userID
+		userID, err := utils.ValidateTokenAndGetUserID(token)
+		if err != nil {
+			log.Println("Token validation failed:", err)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			return
+		}
+
+		//set the userID in the context for subsequent handlers
+		log.Println("Token validated, userID:", userID)
+		c.Set("user_id", userID)
+		c.Next()
+	}
+}

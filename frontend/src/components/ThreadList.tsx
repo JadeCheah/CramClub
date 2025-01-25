@@ -5,6 +5,7 @@ interface Thread {
     id: number;
     title: string;
     content: string;
+    author?: { username: string }; // Optional, only needed for display
 }
 
 interface ThreadListProps {
@@ -21,6 +22,7 @@ const ThreadList: React.FC<ThreadListProps> = ({ threads, deleteThread, setEditi
                     <div className="thread-container" key={thread.id}>
                         <h3 className="thread-title">{thread.title}</h3>
                         <p className="thread-content">{thread.content}</p>
+                        <p className="thread-author">Author: {thread.author?.username || "Unknown"}</p> 
                         <div className="thread-buttons">
                             <button onClick={() => setEditingThread(thread)}>Edit</button>
                             <button onClick={() => deleteThread(thread.id)}>Delete</button>

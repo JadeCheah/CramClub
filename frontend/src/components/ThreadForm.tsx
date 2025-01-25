@@ -19,6 +19,7 @@ const ThreadForm: React.FC<ThreadFormProps> = ( {onSubmit, onUpdate, editingThre
 
     useEffect(() => {
         if (editingThread) {
+            console.log("Editing thread:", editingThread); // Debug message
             setTitle(editingThread.title);
             setContent(editingThread.content);
         } else {
@@ -32,8 +33,10 @@ const ThreadForm: React.FC<ThreadFormProps> = ( {onSubmit, onUpdate, editingThre
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingThread) {
+            console.log("Updating thread with id:", editingThread.id); // Debug message
             onUpdate(editingThread.id, { title, content });
         } else {
+            console.log("Adding new thread with title and content:", { title, content }); // Debug message
             onSubmit({ title, content });
         }
     };

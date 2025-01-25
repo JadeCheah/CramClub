@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import './ProfilePage.css';
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
     useEffect(() => {
         const fetchProfile = async() => {
             try {
-                const response = await axios.get('http://localhost:8080/user/profile', {
+                const response = await axiosInstance.get('/user/profile', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setProfile({
@@ -46,8 +46,7 @@ const ProfilePage: React.FC = () => {
     
     const handleLogout = () => {
         dispatch(logout());
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
+        alert("You have been logged out."); // Debug message
         navigate('/');
     }
 
