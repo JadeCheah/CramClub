@@ -1,22 +1,21 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 
 	"CramClub-backend/models"
 )
 
-// Different from GetThread, this function returns all threads
+// Different from GetThread, this function returns all threads with filtering and sorting
 func GetThreads(c *gin.Context) {
 	var threads []models.Thread
+	dbQuery := models.DB.Preload("Author").Preload("Tags")
 
 	//handles sorting of threads
 	sort := c.DefaultQuery("sort", "createdAt") //accepts "createdAt" or "ratings" as sorting parameter
-	var dbQuery *gorm.DB = models.DB
+
 	switch sort {
 	case "createdAt":
 		dbQuery = dbQuery.Order("created_at DESC")
@@ -26,13 +25,26 @@ func GetThreads(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid sort parameter"})
 		return
 	}
+
 	// Filter by user if a query parameter is provided (e.g., ?user=<id>)
 	if filterUserID := c.Query("user"); filterUserID != "" {
 		dbQuery = dbQuery.Where("user_id = ?", filterUserID)
 	}
 
+	// Filter by tag if a query parameter is provided
+	if tag := c.Query("tag"); tag != "" {
+		dbQuery = dbQuery.Joins("JOIN thread_tags ON thread_tags.thread_id = threads.id").
+			Joins("JOIN tags ON tags.id = thread_tags.tag_id").
+			Where("tags.name = ?", tag)
+	}
+
+	// Search by title if a query parameter is provided
+	if search := c.Query("search"); search != "" {
+		dbQuery = dbQuery.Where("title ILIKE ?", "%"+search+"%")
+	}
+
 	//fetch threads
-	if err := dbQuery.Preload("Author").Preload("Tags").Find(&threads).Error; err != nil {
+	if err := dbQuery.Find(&threads).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -56,8 +68,9 @@ func GetThread(c *gin.Context) {
 
 func CreateThread(c *gin.Context) {
 	var input struct {
-		Title   string `json:"title"`
-		Content string `json:"content"`
+		Title   string   `json:"title"`
+		Content string   `json:"content"`
+		Tags    []string `json:"tags"`
 	}
 
 	//bind JSON payload to thread struct
@@ -73,10 +86,22 @@ func CreateThread(c *gin.Context) {
 		return
 	}
 
+	// Create or find tags
+	var tags []models.Tag
+	for _, tagName := range input.Tags {
+		var tag models.Tag
+		if err := models.DB.Where("name = ?", tagName).FirstOrCreate(&tag, models.Tag{Name: tagName}).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to handle tags"})
+			return
+		}
+		tags = append(tags, tag)
+	}
+
 	//create the thread with the associated userID
 	thread := models.Thread{
 		Title:   input.Title,
 		Content: input.Content,
+		Tags:    tags,
 		UserID:  userID.(uint),
 	}
 
@@ -92,34 +117,41 @@ func CreateThread(c *gin.Context) {
 
 func UpdateThread(c *gin.Context) {
 	id := c.Param("id") //get thread id from URL
-	log.Println("Received request to update thread with id:", id)
 
 	var thread models.Thread
 
 	//check if the thread exists
 	if err := models.DB.First(&thread, id).Error; err != nil {
-		log.Println("Thread not found with id:", id)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Thread not found"})
 		return
 	}
-	log.Println("Thread found:", thread)
 
 	// Bind the JSON payload to the input struct
 	var input struct {
-		Title   string `json:"title"`
-		Content string `json:"content"`
+		Title   string   `json:"title"`
+		Content string   `json:"content"`
+		Tags    []string `json:"tags"`
 	}
 	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println("Invalid input:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
-	log.Println("Received input:", input)
 
-	// Update the thread with the new values
+	// Create or find tags
+	var tags []models.Tag
+	for _, tagName := range input.Tags {
+		var tag models.Tag
+		if err := models.DB.Where("name = ?", tagName).FirstOrCreate(&tag, models.Tag{Name: tagName}).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to handle tags"})
+			return
+		}
+		tags = append(tags, tag)
+	}
+
+	// Update the thread
 	thread.Title = input.Title
 	thread.Content = input.Content
-	log.Println("Updated thread with new values:", thread)
+	thread.Tags = tags
 
 	// //bind the JSON payload to the thread struct
 	// if err := c.ShouldBindJSON(&thread); err != nil {
@@ -129,13 +161,11 @@ func UpdateThread(c *gin.Context) {
 
 	//save the updated thread
 	if err := models.DB.Save(&thread).Error; err != nil {
-		log.Println("Failed to update thread:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update update thread"})
 		return
 	}
 
 	//return the updated thread
-	log.Println("Thread updated successfully:", thread)
 	c.JSON(http.StatusOK, gin.H{"thread": thread})
 }
 

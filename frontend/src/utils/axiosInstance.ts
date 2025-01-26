@@ -4,6 +4,7 @@ import { logout } from '../redux/authSlice';
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:8080", // Base URL for all requests
+    withCredentials: true,
 });
 
 // Placeholder for dynamically setting the store

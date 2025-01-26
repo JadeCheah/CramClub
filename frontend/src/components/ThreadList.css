@@ -23,3 +23,26 @@
     padding: 5px 10px;
     cursor: pointer;
 }
+.tag {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.tag:hover {
+  background-color: #0056b3;
+}
+
+.no-tags {
+  color: gray;
+  font-style: italic;
+}
+
+.thread-tags {
+  margin-top: 10px;
+}
