@@ -36,7 +36,12 @@ const AppHeader: React.FC = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar
+            position="static"
+            sx={{
+                backgroundColor: '#381D2A',
+                color: '#E9E3B4',
+            }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography

@@ -1,32 +1,73 @@
 .profile-container {
-
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .profile-card {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color:antiquewhite;
+    justify-content: space-between;
+    background-color: #E9E3B4;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 90vw;
+    gap: 20px;
 }
 
 .profile-avatar {
     margin: 10px;
+    border: 3px solid #3E6990;
+    border-radius: 50%;
 }
 
 .profile-details {
     display: flex;
     flex-direction: column;
+    text-align: left;
     align-items: flex-start;
     padding-left: 20px;
+    gap: 10px;
+    color: #381D2A;
 }
 
-.profile-divider {
-    
+.profile-details .MuiTypography-h5 {
+    font-weight: bold;
+    color: #3E6990;
+}
+
+.profile-details .MuiTypography-body2 {
+    color: #381D2A;
 }
 
 .profile-actions {
-    gap: 10px;
     display: flex;
-    justify-content: center;
-    padding-right: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-actions .MuiButton-containedPrimary {
+    background-color: #3E6990;
+    color: #E9E3B4;
+}
+
+.profile-actions .MuiButton-containedPrimary:hover {
+    background-color: #F39B6D;
+    color: #381D2A;
+}
+
+.profile-actions .MuiButton-outlinedError {
+    border-color: #F39B6D;
+    color: #F39B6D;
+}
+
+.profile-actions .MuiButton-outlinedError:hover {
+    border-color: #3E6990;
+    color: #3E6990;
 }

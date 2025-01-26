@@ -28,8 +28,8 @@ const ThreadsPage: React.FC = () => {
         }
     };
 
-     // Fetch thread by tag
-     const fetchThreadByTag = async (tagName: string) => {
+    // Fetch thread by tag
+    const fetchThreadByTag = async (tagName: string) => {
         try {
             console.log("Filtering thread by tag:", tagName); // Debug log
             const response = await axiosInstance.get(`/threads/?tag=${tagName}`);
@@ -58,22 +58,23 @@ const ThreadsPage: React.FC = () => {
     return (
         <div className="thread-page">
             <h1>All Threads</h1>
-            {/* Back Button: Visible only when filtering */}
-            {isFiltering && (
-                <button className="back-arrow" onClick={fetchAllThreads}>
-                    ← Back
+            <div className="utility-buttons">
+                {isFiltering && (
+                    <button className="back-arrow" onClick={fetchAllThreads}>
+                        ←
+                    </button>
+                )}
+                <button
+                    className="add-post-button"
+                    onClick={() => navigate("/add-post")} // Navigate to ThreadFormPage
+                >
+                    Add New Post
                 </button>
-            )}
-            <button 
-                className="add-post-button" 
-                onClick={() => navigate("/add-post")} // Navigate to ThreadFormPage
-            >
-                Add New Post
-            </button>
+            </div>
             <ThreadList
                 threads={threads}
                 deleteThread={deleteThread}
-                setEditingThread={(thread) => navigate(`/edit-post/${thread.id}`)} 
+                setEditingThread={(thread) => navigate(`/edit-post/${thread.id}`)}
                 filterByTag={fetchThreadByTag}
             />
         </div>

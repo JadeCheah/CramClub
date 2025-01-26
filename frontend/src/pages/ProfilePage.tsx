@@ -52,13 +52,17 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-container">
-            <Paper className='profile-card' elevation={3}>
+            <Paper 
+                className='profile-card' 
+                elevation={3} 
+                sx={{ 
+                    backgroundColor: '#E9E3B4',
+                    borderRadius: 3,
+                }}
+            >
                 <Avatar alt={profile.username} src="" className="profile-avatar" sx={{ width: 150, height: 150 }} />
                 <div className="profile-details">
                     <Typography variant='h5'>{profile.username}</Typography>
-                    {/*<Typography variant='body1' color='textSecondary'>
-                        johnDoe@example.com
-                    </Typography>}*/}
                     <Typography variant='body2' color="textSecondary">
                         Joined: {profile.joined}
                     </Typography>

@@ -34,8 +34,26 @@ const AuthScreen: React.FC = () => {
     };
 
     return (
-        <Box sx={{ maxWidth: 400, mx: 'auto', mt: 8, p: 3, border: '1px solid #ccc', borderRadius: 2 }}>
-            <Typography variant="h4" gutterBottom>
+        <Box
+            sx={{
+                maxWidth: 400,
+                mx: 'auto',
+                mt: 8,
+                p: 3,
+                backgroundColor: '#E9E3B4',
+                border: '1px solid #3E6990',
+                borderRadius: 3,
+                boxShadow: '0 6px 12px rgba(0, 0, 0, 0.15)',
+            }}>
+            <Typography
+                variant="h4"
+                gutterBottom
+                sx={{
+                    color: '#381D2A',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                }}
+            >
                 {isLogin ? 'Login' : 'Sign Up'}
             </Typography>
             {signupSuccess && (
@@ -53,6 +71,14 @@ const AuthScreen: React.FC = () => {
                     value={formData.username}
                     onChange={handleChange}
                     required
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': { borderColor: '#3E6990' },
+                            '&:hover fieldset': { borderColor: '#F39B6D' },
+                            '&.Mui-focused fieldset': { borderColor: '#3E6990' },
+                        },
+                        '& .MuiInputLabel-root': { color: '#381D2A' },
+                    }}
                 />
                 <TextField
                     name="password"
@@ -63,18 +89,49 @@ const AuthScreen: React.FC = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': { borderColor: '#3E6990' },
+                            '&:hover fieldset': { borderColor: '#F39B6D' },
+                            '&.Mui-focused fieldset': { borderColor: '#3E6990' },
+                        },
+                        '& .MuiInputLabel-root': { color: '#381D2A' },
+                    }}
                 />
                 {error && (
                     <Typography color="error" variant="body2" gutterBottom>
                         {error}
                     </Typography>
                 )}
-                <Button type="submit" variant="contained" color="primary" fullWidth disabled={isLoading}>
+                <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary" 
+                    fullWidth disabled={isLoading}
+                    sx={{
+                        backgroundColor: '#3E6990',
+                        color: '#E9E3B4',
+                        '&:hover': {
+                            backgroundColor: '#F39B6D',
+                            color: '#381D2A',
+                        },
+                        mt: 2,
+                        fontWeight: 'bold',
+                    }}
+                >
                     {isLogin ? 'Login' : 'Sign Up'}
                 </Button>
             </form>
             <Box textAlign="center" mt={2}>
-                <Button onClick={() => setIsLogin(!isLogin)} size="small">
+                <Button 
+                    onClick={() => setIsLogin(!isLogin)} 
+                    size="small"
+                    sx={{
+                        color: '#3E6990',
+                        textTransform: 'none',
+                        '&:hover': { color: '#F39B6D' },
+                    }}
+                >
                     {isLogin ? 'Switch to Sign Up' : 'Switch to Login'}
                 </Button>
             </Box>

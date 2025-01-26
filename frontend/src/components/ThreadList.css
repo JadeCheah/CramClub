@@ -1,48 +1,85 @@
 .thread-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-  
-  .thread-title {
-    font-size: 1.5em;
-    margin-bottom: 5px;
-}
-  
-  .thread-content {
-    font-size: 1em;
-    margin-bottom: 10px;  
-}
-  
-  .thread-buttons {
-    display: flex;
-    gap: 10px;
-}
-  
-  .thread-buttons button {
-    padding: 5px 10px;
-    cursor: pointer;
-}
-.tag {
-  display: inline-block;
-  margin: 0 5px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
+  border: 1px solid #3E6990;
+  background-color: #E9E3B4;
+  color: #381D2A;
+  padding: 15px;
+  margin-bottom: 15px;
   border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.thread-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.thread-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #3E6990;
+}
+
+.thread-content {
+  font-size: 1em;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.thread-date, .thread-author {
+  font-size: 0.9em;
+  color: #381D2A;
+  margin-bottom: 5px;
+}
+
+.thread-buttons button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  background-color: #3E6990;
+  color: #E9E3B4;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.thread-buttons button:hover {
+  background-color: #AABD8C;
+  color: #381D2A;
+}
+
+.tag {
+  background-color: #F39B6D;
+  color: #E9E3B4;
+  border-radius: 16px;
+  padding: 6px 12px;
   font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .tag:hover {
-  background-color: #0056b3;
+  background-color: #3E6990;
+  color: #E9E3B4;
 }
 
 .no-tags {
-  color: gray;
+  color: #381D2A;
   font-style: italic;
 }
 
 .thread-tags {
-  margin-top: 10px;
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; 
+  justify-content: center;
+}
+
+.thread-buttons {
+  margin-top: 15px; 
+  display: flex;
+  gap: 10px; 
+  justify-content: flex-end;
 }
