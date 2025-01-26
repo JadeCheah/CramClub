@@ -14,23 +14,47 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+.thread-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 10px;
+}
+
 .thread-title {
-  font-size: 1.6em;
+  font-size: 2em;
   font-weight: bold;
   margin-bottom: 8px;
+  margin-top: 8px;
   color: #3E6990;
 }
 
 .thread-content {
-  font-size: 1em;
+  font-size: 1.3em;
   margin-bottom: 10px;
   line-height: 1.6;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .thread-date, .thread-author {
   font-size: 0.9em;
   color: #381D2A;
   margin-bottom: 5px;
+}
+
+.thread-author {
+  margin-top: 0px;
+}
+
+.thread-rest {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 10px;
+  margin-top: 0px;
+  align-items: flex-start;
 }
 
 .thread-buttons button {

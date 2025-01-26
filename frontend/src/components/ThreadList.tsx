@@ -22,10 +22,10 @@ interface ThreadListProps {
     filterByTag: (tagName: string) => void; // Function to reset filter and fetch all threads}
 }
 
-const ThreadList: React.FC<ThreadListProps> = ({ 
-    threads, 
-    deleteThread, 
-    setEditingThread, 
+const ThreadList: React.FC<ThreadListProps> = ({
+    threads,
+    deleteThread,
+    setEditingThread,
     filterByTag,
 }) => {
 
@@ -37,7 +37,7 @@ const ThreadList: React.FC<ThreadListProps> = ({
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-            hour12: true, 
+            hour12: true,
         }
         return new Date(dateString).toLocaleString("en-US", options);
     }
@@ -47,27 +47,31 @@ const ThreadList: React.FC<ThreadListProps> = ({
             {threads.map((thread) => {
                 return (
                     <div className="thread-container" key={thread.id}>
-                        <h3 className="thread-title">{thread.title}</h3>
-                        <p className="thread-content">{thread.content}</p>
-                        {thread.createdAt && (
-                            <p className="thread-date">{formatDate(thread.createdAt)}</p>
-                        )}
-                        <p className="thread-author">Author: {thread.author?.username || "Unknown"}</p>
-                        <div className="thread-tags">
-                            Tags:{" "}
-                            {thread.tags && thread.tags.length > 0 ? (
-                                thread.tags.map((tag) => (
-                                    <span
-                                        key={tag.id}
-                                        className="tag"
-                                        onClick={(() => filterByTag(tag.name))} //filter threads by tag
-                                    >
-                                        {tag.name}
-                                    </span>
-                                ))
-                            ) : (
-                                <span className="no-tags">No Tags</span>
+                        <div className="thread-header">
+                            <h3 className="thread-title">{thread.title}</h3>
+                            {thread.createdAt && (
+                                <p className="thread-date">{formatDate(thread.createdAt)}</p>
                             )}
+                        </div>
+                        <div className="thread-rest">
+                            <p className="thread-author">By: {thread.author?.username || "Unknown"}</p>
+                            <p className="thread-content">{thread.content}</p>
+                            <div className="thread-tags">
+                                Tags:{" "}
+                                {thread.tags && thread.tags.length > 0 ? (
+                                    thread.tags.map((tag) => (
+                                        <span
+                                            key={tag.id}
+                                            className="tag"
+                                            onClick={(() => filterByTag(tag.name))} //filter threads by tag
+                                        >
+                                            {tag.name}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="no-tags">No Tags</span>
+                                )}
+                            </div>
                         </div>
                         <div className="thread-buttons">
                             <button onClick={() => setEditingThread(thread)}>Edit</button>

@@ -2,10 +2,12 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -23,8 +25,21 @@ func InjectDB(db *gorm.DB) gin.HandlerFunc {
 }
 
 func initDatabase() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables.")
+	}
+	dsn := os.Getenv("DB_DSN")
 	//Database connection string
-	dsn := "host=localhost user=jadecheah password=dragonfly123 dbname=cramclub port=5432 sslmode=disable"
+	if dsn == "" {
+		// Build DSN from individual environment variables
+		dsn = "host=" + os.Getenv("DB_HOST") +
+			" user=" + os.Getenv("DB_USER") +
+			" password=" + os.Getenv("DB_PASSWORD") +
+			" dbname=" + os.Getenv("DB_NAME") +
+			" port=" + os.Getenv("DB_PORT") +
+			" sslmode=" + os.Getenv("DB_SSLMODE")
+	}
 
 	var err error
 	models.DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -55,7 +70,7 @@ func main() {
 
 	//Add CORS Middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true, // cookies or authentication tokens
