@@ -14,7 +14,6 @@ const ThreadsPage: React.FC = () => {
     const [threads, setThreads] = useState<Thread[]>([]);
     const [isFiltering, setIsFiltering] = useState(false);
     const navigate = useNavigate();
-    // const [editingThread, setEditingThread] = useState<Thread | null>(null);
 
     //fetch all threads from backend 
     const fetchAllThreads = async () => {

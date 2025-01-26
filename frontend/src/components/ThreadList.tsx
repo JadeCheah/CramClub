@@ -19,7 +19,7 @@ interface ThreadListProps {
     threads: Thread[];
     deleteThread: (id: number) => void;
     setEditingThread: (thread: Thread) => void;
-    filterByTag: (tagName: string) => void; // Function to reset filter and fetch all threads}
+    filterByTag: (tagName: string) => void; // Function to reset filter and fetch all threads
 }
 
 const ThreadList: React.FC<ThreadListProps> = ({
