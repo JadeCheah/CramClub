@@ -1,4 +1,4 @@
-# My name: Cheah Yue Pei 
+### Author Name: Cheah Yue Pei 
 # CramClub
 
 CramClub is a platform for students to ask questions, share resources, and engage in academic discussions with features like thread categorization, user profiles, voting, and resource sharing.
@@ -71,8 +71,8 @@ Ensure you have the following installed on your system:
    npm install
    ```
 
-### Running the Application
-## Running the Backend 
+## Running the Application
+### Running the Backend 
 1. Navigate to the `backend` directory:
    ```bash
    cd backend 
@@ -81,7 +81,7 @@ Ensure you have the following installed on your system:
    ```bash
    go run main.go 
    ```
-## Running the frontend 
+### Running the frontend 
 1. Navigate to the `frontend` directory:
    ```bash
    cd frontend
@@ -90,6 +90,15 @@ Ensure you have the following installed on your system:
    ```bash
    npm run dev
    ```
+
+## Contact Me 
+If you have any questions or need further assistance, feel free to contact me:
+1. Email: jadecheah79@gmail.com
+2. Telegram Handle: @y9u7e
+
+
+
+
 
 
 
