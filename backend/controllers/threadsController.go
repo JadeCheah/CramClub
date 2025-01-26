@@ -35,7 +35,7 @@ func GetThreads(c *gin.Context) {
 	if tag := c.Query("tag"); tag != "" {
 		dbQuery = dbQuery.Joins("JOIN thread_tags ON thread_tags.thread_id = threads.id").
 			Joins("JOIN tags ON tags.id = thread_tags.tag_id").
-			Where("tags.name = ?", tag)
+			Where("LOWER(TRIM(tags.name)) = LOWER(TRIM(?))", tag)
 	}
 
 	// Search by title if a query parameter is provided

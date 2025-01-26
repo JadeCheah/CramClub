@@ -22,16 +22,18 @@ const ThreadsPage: React.FC = () => {
             const response = await axiosInstance.get<{ threads: Thread[] }>("/threads/");
             console.log("Fetched threads:", response.data.threads); // Debug log
             setThreads(response.data.threads);
+            setIsFiltering(false);
         } catch (error) {
             console.error("Failed to fetch threads", error);
         }
     };
 
-    
-     // Fetch threads by tag
-     const fetchThreadsByTag = async (tagName: string) => {
+     // Fetch thread by tag
+     const fetchThreadByTag = async (tagName: string) => {
         try {
+            console.log("Filtering thread by tag:", tagName); // Debug log
             const response = await axiosInstance.get(`/threads/?tag=${tagName}`);
+            console.log("Fetched thread by tag:", response.data.threads); // Debug log
             setThreads(response.data.threads);
             setIsFiltering(true); // Mark as filtering
         } catch (error) {
@@ -68,17 +70,11 @@ const ThreadsPage: React.FC = () => {
             >
                 Add New Post
             </button>
-            {/* <ThreadForm
-                onSubmit={addThread}
-                onUpdate={updateThread}
-                editingThread={editingThread}
-                setEditingThread={setEditingThread}
-            /> */}
             <ThreadList
                 threads={threads}
                 deleteThread={deleteThread}
                 setEditingThread={(thread) => navigate(`/edit-post/${thread.id}`)} 
-                filterByTag={fetchThreadsByTag}
+                filterByTag={fetchThreadByTag}
             />
         </div>
     );
