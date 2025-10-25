@@ -5,13 +5,11 @@ CramClub is a platform for students to ask questions, share resources, and engag
 
 ## Table of Contents
 - [Description](#description)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
+- [Running with Docker (Recommended for Easy Setup)](#running-with-docker-recommended-for-easy-setup)
+- [Development Setup Instructions (Manual)](#development-setup-instructions-manual)
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
-- [Running the Application](#running-the-application)
-- [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
+  - [Running the Application](#running-the-application)
 
 ## Description
 CramClub is built with:
@@ -20,27 +18,45 @@ CramClub is built with:
 - **Database**: PostgreSQL
 - **ORM**: GORM
 - **HTTP Client**: Axios
-
-## Prerequisites
+  
+## Running with Docker (Recommended for Easy Setup)
 Ensure you have the following installed on your system:
-1. [Node.js](https://nodejs.org/) (v16 or higher) and npm
-2. [Go](https://golang.org/) (v1.18 or higher)
-3. [PostgreSQL](https://www.postgresql.org/)
-4. [Git](https://git-scm.com/)
+* Docker
+* Docker Compose (usually included with Docker Desktop)
 
-## Setup Instructions
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/JadeCheah/CramClub.git
+   cd CramClub
+   ```
+2. Start all services (backend, frontend, and PostgreSQL):
+   ```bash
+   docker compose up --build
+   ```
+3. Acces the app:
+   ```bash
+   http://localhost:5173
+   ```
+
+## Development Setup Instructions (Manual)
+Ensure you have the following installed on your system:
+* [Node.js](https://nodejs.org/) (v16 or higher) and npm
+* [Go](https://golang.org/) (v1.18 or higher)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Git](https://git-scm.com/)
+  
 1. Clone the repository to your local machine:
    ```bash
    git clone https://github.com/JadeCheah/CramClub.git
    ```
 
 ### Backend Setup
-2. Navigate into the backend directory:
+1. Navigate into the backend directory:
    ```bash
    cd CramClub/backend 
    ```
 
-3. Create a `.env` file in the `backend` directory and add the following environment variables **with your own configurations**:
+2. Create a `.env` file in the `backend` directory and add the following environment variables **with your own configurations**:
    ```
    # Database configuration
    DB_HOST=localhost
@@ -56,7 +72,7 @@ Ensure you have the following installed on your system:
    # CORS configuration (frontend URL)
    FRONTEND_URL=http://localhost:5173
    ```
-4. Install Go dependencies:
+3. Install Go dependencies:
    ```bash
    go mod tidy
    ```
@@ -71,8 +87,8 @@ Ensure you have the following installed on your system:
    npm install
    ```
 
-## Running the Application
-### Running the Backend 
+### Running the Application
+Running the Backend 
 1. Navigate to the `backend` directory:
    ```bash
    cd backend 
@@ -81,7 +97,7 @@ Ensure you have the following installed on your system:
    ```bash
    go run main.go 
    ```
-### Running the frontend 
+Running the frontend 
 1. Navigate to the `frontend` directory:
    ```bash
    cd frontend
@@ -92,7 +108,7 @@ Ensure you have the following installed on your system:
    ```
 
 ## Contact Me 
-If you have any questions or need further assistance, feel free to contact me:
+If you have any questions or need further assistance, feel free to contact me via:
 1. Email: jadecheah79@gmail.com
 2. Telegram Handle: @y9u7e
 
