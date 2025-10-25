@@ -30,6 +30,7 @@ services:
       DB_SSLMODE: disable
       FRONTEND_URL: http://localhost:5173
       PORT: "8080"
+      JWT_SECRET: 1029602c0063e2ee2ace3a40b491634239166c7d3b822af95ac8918091bc756b
     depends_on:
       db:
         condition: service_healthy
