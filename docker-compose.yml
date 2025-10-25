@@ -18,8 +18,8 @@ services:
   backend:
     build:
       context: ./backend
-    env_file:
-      - ./backend/.env
+    # env_file:
+    #   - ./backend/.env
     environment:
       APP_ENV: docker
       DB_HOST: db
