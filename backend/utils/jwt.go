@@ -15,11 +15,14 @@ import (
 var jwtSecret string
 
 func init() {
-	//load .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("APP_ENV") == "local" {
+		_ = godotenv.Load() // ignore error
 	}
+	//load .env file
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	jwtSecret = os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {

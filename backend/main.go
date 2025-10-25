@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -26,9 +27,14 @@ func InjectDB(db *gorm.DB) gin.HandlerFunc {
 
 func initDatabase() {
 	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using environment variables.")
+	// only load in local dev:
+	if os.Getenv("APP_ENV") == "local" {
+		_ = godotenv.Load() // ignore error
 	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Println("No .env file found, using environment variables.")
+	// }
+
 	dsn := os.Getenv("DB_DSN")
 	//Database connection string
 	if dsn == "" {
@@ -68,6 +74,19 @@ func main() {
 	r := gin.Default() //set up a gin router
 	r.Use(InjectDB(models.DB))
 
+	rawOrigins := os.Getenv("FRONTEND_URL")
+	origins := []string{}
+	for _, s := range strings.Split(rawOrigins, ",") {
+		o := strings.TrimSpace(s)
+		if o != "" {
+			origins = append(origins, o)
+		}
+	}
+	if len(origins) == 0 {
+		// sensible default for local dev
+		origins = []string{"http://localhost:5173"}
+	}
+
 	//Add CORS Middleware
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{os.Getenv("FRONTEND_URL")},
@@ -84,8 +103,12 @@ func main() {
 	routes.RegisterThreadRoutes(r, authController)
 	routes.RegisterUserRoutes(r)
 
-	log.Println("Starting server on port 8080...")
-	if err := r.Run(":8080"); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("Starting server on :%s...", port)
+	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Failed to start server: ", err)
 	}
 }

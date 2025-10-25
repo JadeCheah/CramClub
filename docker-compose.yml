@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: cramuser
+      POSTGRES_PASSWORD: crampass
+      POSTGRES_DB: cramclub
+    ports:
+      - "5432:5432"  
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      APP_ENV: docker
+      DB_HOST: db
+      DB_USER: cramuser
+      DB_PASSWORD: crampass
+      DB_NAME: cramclub     
+      DB_PORT: "5432"
+      DB_SSLMODE: disable
+      FRONTEND_URL: http://localhost:5173
+      PORT: "8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      # if your frontend reads this at build-time
+      VITE_API_URL: http://localhost:8080
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
